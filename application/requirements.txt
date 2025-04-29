@@ -3,3 +3,4 @@ torch==2.2.1
 transformers==4.38.2
 pillow==10.2.0
 accelerate==0.27.2
+numpy<2.0
