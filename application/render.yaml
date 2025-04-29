@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: image-captioning
+    runtime: python
+    buildCommand: ""
+    startCommand: python app.py
