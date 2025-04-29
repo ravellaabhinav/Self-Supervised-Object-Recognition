@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Captioning | Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Generated Captions</h1>
+
+        <div class="content-wrapper">
+            <div class="image-container">
+                <img src="{{ url_for('static', filename='uploads/' + filename) }}" alt="Uploaded Image">
+            </div>
+            <div class="caption-container">
+                <h2><span class="blue-dot"></span> BLIP Caption:</h2>
+                <p class="caption-text">{{ blip_caption }}</p>
+                <h2><span class="green-dot"></span> ViT Caption:</h2>
+                <p class="caption-text">{{ vit_caption }}</p>
+            </div>
+        </div>
+
+        <a href="/" class="back-button">Upload Another Image</a>
+
+        <div id="toast" class="toast">Captions Generated Successfully! 🎉</div>
+    </div>
+
+    <script>
+        window.onload = function() {
+            var x = document.getElementById("toast");
+            x.className = "toast show";
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+    </script>
+</body>
+</html>

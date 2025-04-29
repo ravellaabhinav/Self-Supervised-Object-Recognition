@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Captioning | Upload</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>CSE 676: Deep Learning, Spring 2025</h2>
+            <h3>Final Project</h3>
+            <div class="team">
+                <p><strong>Team Members:</strong></p>
+                <ul>
+                    <li>• Satwika Davala - <i>satwikad</i></li>
+                    <li>• Mythri Sivakumar - <i>mythrish</i></li>
+                    <li>• Abhinav Ravella - <i>ravella</i></li>
+                </ul>
+            </div>
+        </div>
+
+        <h1>Upload an Image for Captioning</h1>
+
+        <form id="uploadForm" action="/predict" method="post" enctype="multipart/form-data" class="upload-form">
+            <div id="drop-area">
+                <p id="uploadText">Drag & Drop your image here<br>or<br>Click to Upload</p>
+                <input type="file" name="image" id="fileElem" accept="image/*" required>
+                <img id="previewImage" style="display:none; max-width: 100%; margin-top: 20px; border-radius: 10px;" />
+            </div>
+            <button type="submit">Generate Captions</button>
+        </form>
+        
+        <!-- Spinner -->
+        <div id="loadingSpinner" style="display:none;">
+            <img src="{{ url_for('static', filename='spinner.gif') }}" alt="Loading..." width="80">
+            <p>Generating Captions...</p>
+        </div>
+        
+    </div>
+
+    <script>
+        var dropArea = document.getElementById('drop-area');
+        var fileInput = document.getElementById('fileElem');
+        var previewImage = document.getElementById('previewImage');
+        var uploadText = document.getElementById('uploadText');
+        var uploadForm = document.getElementById('uploadForm');
+        var loadingSpinner = document.getElementById('loadingSpinner');
+        
+        // Drag and drop behavior
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropArea.classList.add('highlight');
+            }, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dropArea.classList.remove('highlight');
+            }, false);
+        });
+        
+        dropArea.addEventListener('drop', (e) => {
+            let dt = e.dataTransfer;
+            let files = dt.files;
+            fileInput.files = files;
+            showPreview(files[0]);
+        });
+        
+        dropArea.addEventListener('click', () => fileInput.click());
+        
+        fileInput.addEventListener('change', function() {
+            if (fileInput.files.length > 0) {
+                showPreview(fileInput.files[0]);
+            }
+        });
+        
+        function showPreview(file) {
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = 'block';
+                    uploadText.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // On form submit, hide form, show spinner
+        uploadForm.addEventListener('submit', function() {
+            uploadForm.style.display = 'none';    // Hide the form
+            loadingSpinner.style.display = 'block';  // Show spinner
+        });
+        </script>        
+        
+</body>
+</html>
